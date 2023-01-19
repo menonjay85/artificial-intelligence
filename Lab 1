@@ -1,0 +1,94 @@
+from collections import deque
+
+class Tree:
+    def __init__(self, data):
+        self.data = data
+        self.left = None
+        self.right = None
+
+    def push(self, val):
+        self.container.append(val)
+
+    def pop(self):
+        return self.container.pop()
+
+    def peek(self):
+        return self.container[-1]
+
+    def is_empty(self):
+        return len(self.container) == 0
+
+    def size(self):
+        return len(self.container)
+
+    def add_child(self, data):
+        if data == self.data:
+            print("Found")
+            return
+
+        if data < self.data:
+            # add data in left subtree
+            if self.left:
+                self.left.add_child(data)
+            else:
+                self.left = Tree(data)
+        else:
+            # add data in right subtree
+            if self.right:
+                self.right.add_child(data)
+            else:
+                self.right = Tree(data)
+
+    def dfs(self):
+        elements = []
+        # visit base node
+        # visit left tree
+        # visit left child
+        # visit left's left child
+        elements.append(self.data)
+
+        if self.left:
+            elements += self.left.dfs()
+
+        # Visit right tree
+        if self.right:
+            elements += self.right.dfs()
+
+        return elements
+
+    def search(self, val):
+        if self.data == val:
+            return True
+
+        if val < self.data :
+            # Value might be in the left subtree
+            if self.left:
+                return self.left.search(val)
+            else:
+                return False
+
+        if val > self.data :
+            # Value might be in the right subtree
+            if self.right:
+                return self.right.search(val)
+            else:
+                return False
+
+def build_tree(elements):
+    root = Tree(elements[0])
+    stack = deque()
+    stack.append(elements[0])
+
+    for i in range(1, len(elements)):
+        root.add_child(elements[i])
+        stack.append(elements[i])
+
+    print(stack)
+    return root
+
+if __name__ == '__main__':
+    numbers = [7, 2, 25, 9, 80, 70, 5, 15, 8]
+    numbers_tree = build_tree(numbers)
+    print(f"After applying DFS: \n{numbers_tree.dfs()}")
+    
+    print(numbers_tree.search(70))
